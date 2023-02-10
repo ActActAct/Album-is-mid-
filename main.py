@@ -17,7 +17,19 @@
 #finished getMetadata which correctly creates a dictionary of dictionary of the metadata of the album
 #now need to clean the lyrics of the song, don't really need the perfect organizaiton of the song, but would be imporant to see keep the meaning for neural network
 
+#***clean up code, dependencies, and data structure sI am using******
+#create functions for singular song by number or by song name
+#create functions for mass ports of entire album but by song names
+#    if need the number for song just create a ounter variable while it iterates or something
 import getMetadata
+#create a dictionary
+word_distribution = {}
 getMetadata.asker()
 allLyrics = getMetadata.getAlbumLyrics()
-print(allLyrics[5])
+word_distribution = getMetadata.getLyricsDistribution(0)
+
+for i in allLyrics:
+    word_distribution.append(getMetadata.getLyricsDistribution(i))
+
+#export the data as a data table instead and then graph in power bi
+#getMetadata.plot_word_distribution(word_distribution)
