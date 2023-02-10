@@ -1,10 +1,10 @@
-#get the metadata of the song before we start using an algorithm to parse the lyrics and metadata of the song
+#bunch of functions to get the metadata and clean it
+#also bunch of functions to get the lyrics and clean it
 import json
-import pandas as pd
 from lyricsgenius import Genius
 
 genius = Genius("U-a-_BwPRV75Nr3OolkpIJ4kk8UJpELB9PeZYEFmd32x8RvfdG0DX5Eyi45tAAZ0")
-
+list_of_dicts = []
 
 def asker():
     albumName = input("What is the name of the album you want to analyze? ")
@@ -19,27 +19,47 @@ def scraper(albumName, artistName):
     album.save_lyrics()
 
     #save json as a dictionary
-    name = 'Lyrics_' + album.name + '.json'
+    album_name = album.name.replace(" ", "")
+    name = 'Lyrics_' + album_name + '.json'
+
+
     with open(name) as json_file:
         data = json.load(json_file)
-    json_file.close()
 
-    #print the data from data
-    #organize the data
-    df = pd.DataFrame.from_dict(data, orient='index', columns=["Value"])
-    print(df["tracks"])
+    for item in data["tracks"]:
+        list_of_dicts.append(dict(item))
 
-with open("Lyrics_Donda.json") as json_file:
-    data = json.load(json_file)
-json_file.close()
-df = pd.DataFrame.from_dict(data, orient='index', columns=["Value"])
-df = df.transpose()
-df = pd.json_normalize(df["tracks"])
-df = df.transpose()
-trackList = []
-print(df[0][0])
-for i in range(len(df)):
-    trackList.append(pd.json_normalize(df[0][i]))
-#adds a 0 to the front, becasue it thinks its an identifier
-#switch the indexing to the number of the tracks
-print(trackList[0])
+
+#get the song from the album with the key
+def cleaner(lyrics):
+    #remove the text before the word Lyrics including the word Lyrics
+    lyrics = lyrics[lyrics.find("Lyrics")+6:]
+    #remove any instance of 123Embed
+    return lyrics.replace("123Embed", "")
+
+
+
+def getLyrics(number):
+
+    return cleaner(list_of_dicts[number]["song"]["lyrics"])
+
+
+def getAlbumLyrics():
+
+    allLyrics = []
+
+    for i in range(len(list_of_dicts)):
+        allLyrics.append(getLyrics(i))
+
+    return allLyrics
+
+def getProducers(number):
+
+    #use the link write somebot/code to collect producers and songwriters
+    return list_of_dicts[number]["song"]
+
+
+
+
+
+

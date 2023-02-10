@@ -13,6 +13,11 @@
 #7) maybe have a visual representation of the album
 #    could be a word cloud, spotify wrap style visual, a web linking each song with % similarity between each song
 
-# create a class for songs
+#focusing on lyrics first
+#finished getMetadata which correctly creates a dictionary of dictionary of the metadata of the album
+#now need to clean the lyrics of the song, don't really need the perfect organizaiton of the song, but would be imporant to see keep the meaning for neural network
 
-
+import getMetadata
+getMetadata.asker()
+allLyrics = getMetadata.getAlbumLyrics()
+print(allLyrics[5])
